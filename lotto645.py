@@ -161,6 +161,7 @@ class Lotto645:
         return json.loads(res.text)
 
     def check_winning(self, auth_ctrl: auth.AuthController) -> dict:
+        print("check winning")
         assert type(auth_ctrl) == auth.AuthController
 
         headers = self._generate_req_headers(auth_ctrl)
