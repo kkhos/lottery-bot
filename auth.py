@@ -52,7 +52,7 @@ class AuthController:
 
     def _get_default_auth_cred(self):
         res = self.http_client.get(
-            "https://dhlottery.co.kr/gameResult.do?method=byWin&wiselog=H_C_1_1"
+            "https://dhlottery.co.kr/common.do?method=main"
         )
 
         return self._get_j_session_id_from_response(res)
