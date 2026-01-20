@@ -91,16 +91,28 @@ def buy():
     response = buy_win720(globalAuthCtrl, username) 
     send_message(1, 1, response=response, webhook_url=discord_webhook_url)
 
+def test_balance():
+    load_dotenv(override=True)
+    username = os.environ.get('USERNAME')
+    password = os.environ.get('PASSWORD')
+
+    globalAuthCtrl = auth.AuthController()
+    globalAuthCtrl.login(username, password)
+    
+    balance = globalAuthCtrl.get_user_balance()
+    print(f"User Balance: {balance}")
+
 def run():
     if len(sys.argv) < 2:
-        print("Usage: python controller.py [buy|check]")
+        print("Usage: python controller.py [buy|check|test]")
         return
 
     if sys.argv[1] == "buy":
         buy()
     elif sys.argv[1] == "check":
         check()
-  
+    elif sys.argv[1] == "test":
+        test_balance()
 
 if __name__ == "__main__":
     run()
