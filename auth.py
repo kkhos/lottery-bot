@@ -134,7 +134,7 @@ class AuthController:
              self._update_auth_cred(new_jsessionid)
 
         try:
-             self.http_client.get("https://dhlottery.co.kr/main", headers=self._REQ_HEADERS)
+             self.http_client.get("https://www.dhlottery.co.kr/common.do?method=main", headers=self._REQ_HEADERS)
         except Exception as e:
              print(f"[Warning] Failed to check main page after login: {e}")
              
