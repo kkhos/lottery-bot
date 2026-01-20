@@ -1,4 +1,4 @@
-name: Check Winning
+name: Check lotto
 on:
   schedule:
     - cron: 0 13 * * 6 # every Saturday on 10:00 PM (KST)
@@ -18,7 +18,7 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Run Scripts
-        run: make check
+        run: make check_lotto
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}

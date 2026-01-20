@@ -52,7 +52,7 @@ def send_message(mode: int, lottery_type: int, response: dict, webhook_url: str)
         else:
             notify.send_win720_buying_message(response, webhook_url)
 
-def check():
+def check_lotto():
     load_dotenv(override=True)
 
     username = os.environ.get('USERNAME')
@@ -63,17 +63,26 @@ def check():
     globalAuthCtrl = auth.AuthController()
     globalAuthCtrl.login(username, password)
 
-
     response = check_winning_lotto645(globalAuthCtrl)
     send_message(0, 0, response=response, webhook_url=discord_webhook_url)
 
-    time.sleep(10)
-    
+
+def check_win():
+    load_dotenv(override=True)
+
+    username = os.environ.get('USERNAME')
+    password = os.environ.get('PASSWORD')
+    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
+    discord_webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
+
+    globalAuthCtrl = auth.AuthController()
+    globalAuthCtrl.login(username, password)
+
     response = check_winning_win720(globalAuthCtrl)
     send_message(0, 1, response=response, webhook_url=discord_webhook_url)
 
-def buy(): 
-    
+
+def buy_lotto():
     load_dotenv(override=True) 
 
     username = os.environ.get('USERNAME')
@@ -89,13 +98,23 @@ def buy():
     response = buy_lotto645(globalAuthCtrl, count, mode) 
     send_message(1, 0, response=response, webhook_url=discord_webhook_url)
 
-    time.sleep(10)
 
-    globalAuthCtrl.http_client.session.cookies.clear()
+def buy_win():
+    load_dotenv(override=True)
+
+    username = os.environ.get('USERNAME')
+    password = os.environ.get('PASSWORD')
+    count = int(os.environ.get('COUNT'))
+    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL')
+    discord_webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
+    mode = "AUTO"
+
+    globalAuthCtrl = auth.AuthController()
     globalAuthCtrl.login(username, password)
 
     response = buy_win720(globalAuthCtrl, username) 
     send_message(1, 1, response=response, webhook_url=discord_webhook_url)
+
 
 def get_user_balance():
     load_dotenv(override=True)
@@ -109,15 +128,20 @@ def get_user_balance():
     balance = globalAuthCtrl.get_user_balance()
     return balance
 
+
 def run():
     if len(sys.argv) < 2:
         print("Usage: python controller.py [buy|check|test]")
         return
 
-    if sys.argv[1] == "buy":
-        buy()
-    elif sys.argv[1] == "check":
-        check()
+    if sys.argv[1] == "buy_lotto":
+        buy_lotto()
+    elif sys.argv[1] == "buy_win":
+        buy_win()
+    elif sys.argv[1] == "check_lotto":
+        check_lotto()
+    elif sys.argv[1] == "check_lotto":
+        check_win()
     elif sys.argv[1] == "test":
         get_user_balance()
 
