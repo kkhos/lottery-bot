@@ -13,7 +13,10 @@ def buy_lotto645(authCtrl: auth.AuthController, cnt: int, mode: str):
     lotto = lotto645.Lotto645()
     _mode = lotto645.Lotto645Mode[mode.upper()]
     response = lotto.buy_lotto645(authCtrl, cnt, _mode)
-    response['balance'] = authCtrl.get_user_balance()
+
+    time.sleep(10)
+
+    response['balance'] = get_user_balance()
     return response
 
 def check_winning_lotto645(authCtrl: auth.AuthController) -> dict:
@@ -24,7 +27,10 @@ def check_winning_lotto645(authCtrl: auth.AuthController) -> dict:
 def buy_win720(authCtrl: auth.AuthController, username: str):
     pension = win720.Win720()
     response = pension.buy_Win720(authCtrl, username)
-    response['balance'] = authCtrl.get_user_balance()
+
+    time.sleep(10)
+
+    response['balance'] = get_user_balance()
     return response
 
 def check_winning_win720(authCtrl: auth.AuthController) -> dict:
@@ -91,16 +97,17 @@ def buy():
     response = buy_win720(globalAuthCtrl, username) 
     send_message(1, 1, response=response, webhook_url=discord_webhook_url)
 
-def test_balance():
+def get_user_balance():
     load_dotenv(override=True)
     username = os.environ.get('USERNAME')
     password = os.environ.get('PASSWORD')
 
     globalAuthCtrl = auth.AuthController()
+    globalAuthCtrl.http_client.session.cookies.clear()
     globalAuthCtrl.login(username, password)
     
     balance = globalAuthCtrl.get_user_balance()
-    print(f"User Balance: {balance}")
+    return balance
 
 def run():
     if len(sys.argv) < 2:
@@ -112,7 +119,7 @@ def run():
     elif sys.argv[1] == "check":
         check()
     elif sys.argv[1] == "test":
-        test_balance()
+        get_user_balance()
 
 if __name__ == "__main__":
     run()

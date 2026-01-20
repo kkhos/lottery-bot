@@ -38,9 +38,6 @@ class AuthController:
         assert isinstance(user_id, str)
         assert isinstance(password, str)
 
-        self.http_client.get("https://dhlottery.co.kr/", headers=self._REQ_HEADERS)
-        self.http_client.get("https://dhlottery.co.kr/user.do?method=login", headers=self._REQ_HEADERS)
-        self.http_client.get("https://www.dhlottery.co.kr/", headers=self._REQ_HEADERS)
         self.http_client.get("https://www.dhlottery.co.kr/user.do?method=login", headers=self._REQ_HEADERS)
 
         modulus, exponent = self._get_rsa_key()
