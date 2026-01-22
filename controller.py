@@ -140,7 +140,7 @@ def run():
         buy_win()
     elif sys.argv[1] == "check_lotto":
         check_lotto()
-    elif sys.argv[1] == "check_lotto":
+    elif sys.argv[1] == "check_win":
         check_win()
     elif sys.argv[1] == "test":
         get_user_balance()
