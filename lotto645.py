@@ -1,6 +1,7 @@
 import datetime
 import json
 import requests
+import time
 
 from datetime import timedelta
 from enum import Enum
@@ -104,10 +105,19 @@ class Lotto645:
         headers["Sec-Fetch-Mode"] = "cors"
         headers["Sec-Fetch-Dest"] = "empty"
 
-        res = self.http_client.post(
-            url="https://ol.dhlottery.co.kr/olotto/game/egovUserReadySocket.json", 
-            headers=headers
-        )
+        res = None
+        for attempt in range(5):
+            try:
+                res = self.http_client.post(
+                    url="https://ol.dhlottery.co.kr/olotto/game/egovUserReadySocket.json", 
+                    headers=headers
+                )
+                break
+            except requests.RequestException as e:
+                logger.warning(f"[Warning] Ready socket request failed ({attempt + 1}/5): {e}")
+                if attempt == 4:
+                    raise
+                time.sleep(2)
         
         direct = json.loads(res.text)["ready_ip"]
         

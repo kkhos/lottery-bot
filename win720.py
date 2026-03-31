@@ -2,6 +2,7 @@ import json
 import datetime
 import base64
 import requests
+import time
 
 from enum import Enum
 from bs4 import BeautifulSoup as BS
@@ -51,6 +52,18 @@ class Win720:
 
     def __init__(self):
         self.http_client = HttpClientSingleton.get_instance()
+
+    def _post_with_retry(self, url: str, headers: dict, data: dict, retries: int = 5):
+        last_error = None
+        for attempt in range(retries):
+            try:
+                return self.http_client.post(url=url, headers=headers, data=data)
+            except requests.RequestException as e:
+                last_error = e
+                logger.warning(f"[Warning] Request failed ({attempt + 1}/{retries}) {url}: {e}")
+                if attempt < retries - 1:
+                    time.sleep(2)
+        raise RuntimeError(f"Request failed after {retries} retries: {url}") from last_error
 
     def buy_Win720(
         self, 
@@ -131,8 +144,8 @@ class Win720:
             "q": requests.utils.quote(self._encText(payload))
         }
 
-        res = self.http_client.post(
-            url="https://el.dhlottery.co.kr/makeAutoNo.do", 
+        res = self._post_with_retry(
+            url="https://el.dhlottery.co.kr/makeAutoNo.do",
             headers=headers,
             data=data
         )
@@ -147,8 +160,8 @@ class Win720:
             "q": requests.utils.quote(self._encText(payload))
         }
 
-        res = self.http_client.post(
-            url="https://el.dhlottery.co.kr/makeOrderNo.do", 
+        res = self._post_with_retry(
+            url="https://el.dhlottery.co.kr/makeOrderNo.do",
             headers=headers,
             data=data
         )
@@ -167,8 +180,8 @@ class Win720:
             "q": requests.utils.quote(self._encText(payload))
         }
         
-        res = self.http_client.post(
-            url="https://el.dhlottery.co.kr/connPro.do", 
+        res = self._post_with_retry(
+            url="https://el.dhlottery.co.kr/connPro.do",
             headers=headers,
             data=data
         )
