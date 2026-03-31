@@ -131,16 +131,16 @@ def get_user_balance():
 
 def run():
     if len(sys.argv) < 2:
-        print("Usage: python controller.py [buy|check|test]")
+        print("Usage: python controller.py [buy_lotto|buy_win720|check_lotto|check_win720|test]")
         return
 
     if sys.argv[1] == "buy_lotto":
         buy_lotto()
-    elif sys.argv[1] == "buy_win":
+    elif sys.argv[1] in ["buy_win", "buy_win720"]:
         buy_win()
     elif sys.argv[1] == "check_lotto":
         check_lotto()
-    elif sys.argv[1] == "check_win":
+    elif sys.argv[1] in ["check_win", "check_win720"]:
         check_win()
     elif sys.argv[1] == "test":
         get_user_balance()
