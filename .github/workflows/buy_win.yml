@@ -1,7 +1,8 @@
 name: Buy win
 on:
   schedule:
-    - cron: 0 1 * * 4 # every Thursday on 03:00 PM (KST)
+    - cron: 0 13 * * 4 # every Thursday on 03:00 PM (KST)
+      timezone: 'Asia/Seoul'
   workflow_dispatch:
 
 jobs:
